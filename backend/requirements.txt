@@ -22,3 +22,5 @@ pytest==8.1.1
 python-multipart==0.0.9
 # Cliente oficial da OpenAI para integração com GPT (geração de conteúdo de blog com IA)
 openai>=1.30.0
+# Auditoria de segurança e detecção de vulnerabilidades conhecidas (CVE) em dependências
+pip-audit>=2.7.0

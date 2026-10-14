@@ -133,3 +133,4 @@ docker exec -it blog_frontend npm run test
 2. **Permissões Granulares:** Super Admin protegido contra exclusão ou alteração de privilégios.
 3. **Autenticação Segura:** Senhas criptografadas usando o algoritmo `bcrypt` e tokens `JWT`.
 4. **Proteção de Variáveis de Ambiente:** Arquivos `.env` protegidos pelo `.gitignore` e pelo `.dockerignore`.
+5. **Auditoria de Bibliotecas Externas:** Script automatizado (`python backend/scripts/validate_security.py` / `npm run audit`) integrando `pip-audit` (backend) e `npm audit` (frontend) para validação preventiva de CVEs antes de cada atualização no GitHub.
