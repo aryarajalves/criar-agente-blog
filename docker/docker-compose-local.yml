@@ -1,0 +1,53 @@
+name: criablog-aryaraj
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: blog_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin_password_123
+      POSTGRES_DB: blog_db
+    ports:
+      - "5436:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/backend/Dockerfile
+    container_name: blog_backend
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://postgres:admin_password_123@db:5432/blog_db
+      - JWT_SECRET=super_secret_jwt_key_987654321
+      - ADMIN_USERNAME=aryaraj
+      - ADMIN_EMAIL=aryarajmarketing@gmail.com
+      - ADMIN_PASSWORD=123456
+    ports:
+      - "8000:8000"
+    volumes:
+      - ../backend:/app
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/frontend/Dockerfile
+    container_name: blog_frontend
+    restart: always
+    ports:
+      - "5300:5300"
+    volumes:
+      - ../frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:

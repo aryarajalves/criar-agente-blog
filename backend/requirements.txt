@@ -1,0 +1,24 @@
+# Framework web principal
+fastapi==0.110.0
+# Servidor web ASGI para rodar o FastAPI
+uvicorn==0.28.0
+# ORM moderno unindo SQLAlchemy e Pydantic
+sqlmodel==0.0.16
+# Driver para conexão do Python com PostgreSQL
+psycopg2-binary==2.9.9
+# Biblioteca para criação e verificação de tokens JWT
+pyjwt==2.8.0
+# Biblioteca para criptografia de senhas
+passlib==1.7.4
+# Implementação do algoritmo bcrypt usado pelo passlib
+bcrypt==4.1.2
+# Utilitário para ler variáveis de ambiente do arquivo .env (opcional, mas bom ter)
+python-dotenv==1.0.1
+# Cliente HTTP assíncrono para testes
+httpx==0.27.0
+# Framework para execução de testes unitários do backend
+pytest==8.1.1
+# Dependência do FastAPI para lidar com formulários (ex: OAuth2 login)
+python-multipart==0.0.9
+# Cliente oficial da OpenAI para integração com GPT (geração de conteúdo de blog com IA)
+openai>=1.30.0
