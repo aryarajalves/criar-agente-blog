@@ -23,9 +23,9 @@ Este documento centraliza as definições, diretrizes de negócio e comportament
 - **Acesso Administrativo:**
   - Login restrito na URL `http://localhost:5300/login`.
   - Autenticação baseada em JWT com validade padrão de 7 dias.
-  - Credenciais oficiais de desenvolvimento:
-    - **E-mail:** `aryarajmarketing@gmail.com`
-    - **Senha:** `123456`
+  - Credenciais de desenvolvimento (configuradas no arquivo .env):
+    - **E-mail:** `admin@exemplo.com`
+    - **Senha:** `senha_segura_exemplo`
 - **Prevenção de IDOR:**
   - Toda operação de CRUD de posts na área administrativa (criar, ler todos, atualizar, excluir) é rigidamente filtrada pelo `client_id` associado ao usuário administrador autenticado no contexto.
   - A API pública de posts filtra os dados pelo `client_id` padrão (`default_client`) para garantir isolamento e consistência.

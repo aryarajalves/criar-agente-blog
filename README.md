@@ -37,8 +37,8 @@ A arquitetura une um backend robusto em Python, um frontend altamente estético 
 
 - **URL da Interface:** `http://localhost:5300`
 - **URL da API (Swagger):** `http://localhost:8000/docs`
-- **E-mail do Super Admin:** `aryarajmarketing@gmail.com`
-- **Senha:** `123456`
+- **E-mail do Super Admin:** `admin@exemplo.com` (definido no arquivo `.env` via `ADMIN_EMAIL`)
+- **Senha:** `senha_segura_exemplo` (definida no arquivo `.env` via `ADMIN_PASSWORD`)
 
 ---
 

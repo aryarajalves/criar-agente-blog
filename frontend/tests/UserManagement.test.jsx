@@ -27,7 +27,7 @@ describe('UserManagement Component', () => {
     {
       id: 1,
       username: 'aryaraj',
-      email: 'aryarajmarketing@gmail.com',
+      email: 'superadmin@teste.com',
       role: 'super_admin',
       created_at: '2026-05-23T10:00:00Z',
     },
@@ -53,7 +53,7 @@ describe('UserManagement Component', () => {
 
   beforeEach(() => {
     localStorage.setItem('token', 'fake-jwt-token');
-    localStorage.setItem('email', 'aryarajmarketing@gmail.com');
+    localStorage.setItem('email', 'superadmin@teste.com');
     vi.clearAllMocks();
     api.getUsers.mockResolvedValue(mockUsers);
     api.getInvites.mockResolvedValue(mockInvites);
