@@ -9,6 +9,7 @@ class User(SQLModel, table=True):
     username: str = Field(index=True)
     email: str = Field(unique=True, index=True)
     hashed_password: str
+    whatsapp: Optional[str] = Field(default=None)
     role: str = Field(default="admin", index=True) # "super_admin" | "admin"
     created_at: datetime = Field(default_factory=datetime.utcnow)
     client_id: str = Field(default="default_client", index=True)

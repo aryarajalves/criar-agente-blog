@@ -295,11 +295,11 @@ export const api = {
     return response.json();
   },
 
-  acceptInvite: async (token, { username, email, password }) => {
+  acceptInvite: async (token, { username, email, password, whatsapp }) => {
     const response = await fetch(`${API_BASE_URL}/users/invites/${token}/accept`, {
       method: 'POST',
       headers: getHeaders(false),
-      body: JSON.stringify({ username, email, password }),
+      body: JSON.stringify({ username, email, password, whatsapp }),
     });
     
     if (!response.ok) {

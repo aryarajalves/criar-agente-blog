@@ -1,3 +1,4 @@
+import re
 import secrets
 from datetime import datetime, timedelta
 from typing import List, Optional
@@ -16,6 +17,7 @@ class UserResponse(BaseModel):
     id: int
     username: str
     email: str
+    whatsapp: Optional[str] = None
     role: str
     created_at: datetime
 
@@ -42,6 +44,7 @@ class AcceptInviteRequest(BaseModel):
     username: str
     email: str
     password: str
+    whatsapp: Optional[str] = None
 
 # 1. Listar Usuários (Requer autenticação)
 @router.get("", response_model=List[UserResponse])
@@ -176,9 +179,35 @@ def accept_invite(
     if len(clean_username) < 3:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="O nome de usuário deve ter pelo menos 3 caracteres.")
     
-    if len(request.password) < 6:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="A senha deve ter pelo menos 6 caracteres.")
+    # Validações de senha (mínimo 12 caracteres, maiúscula, minúscula, número e caractere especial)
+    if len(request.password) < 12:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail="A senha deve ter no mínimo 12 caracteres."
+        )
+    if not re.search(r'[A-Z]', request.password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="A senha deve conter pelo menos uma letra maiúscula."
+        )
+    if not re.search(r'[a-z]', request.password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="A senha deve conter pelo menos uma letra minúscula."
+        )
+    if not re.search(r'[0-9]', request.password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="A senha deve conter pelo menos um número."
+        )
+    if not re.search(r'[^A-Za-z0-9]', request.password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="A senha deve conter pelo menos um caractere especial (ex: !@#$%^&*)."
+        )
     
+    clean_whatsapp = request.whatsapp.strip() if request.whatsapp else None
+
     # Verificar e-mail duplicado
     existing_email = session.exec(select(User).where(User.email == clean_email)).first()
     if existing_email:
@@ -194,6 +223,7 @@ def accept_invite(
     new_user = User(
         username=clean_username,
         email=clean_email,
+        whatsapp=clean_whatsapp,
         hashed_password=hashed_password,
         role="admin", # Garantido como Admin
         client_id=invite.client_id
@@ -207,11 +237,12 @@ def accept_invite(
     session.add(invite)
     
     session.commit()
-    logger.info(f"Novo usuário Admin cadastrado via convite: {clean_username} ({clean_email}).")
+    logger.info(f"Novo usuário Admin cadastrado via convite: {clean_username} ({clean_email}) com whatsapp {clean_whatsapp}.")
     
     return {
         "message": "Conta de administrador criada com sucesso!",
         "username": clean_username,
         "email": clean_email,
+        "whatsapp": clean_whatsapp,
         "role": "admin"
     }

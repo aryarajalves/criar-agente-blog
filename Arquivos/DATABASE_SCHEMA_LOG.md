@@ -98,4 +98,14 @@ Tabela para gerenciamento e auditoria de links de convite para novos administrad
 - **Script:** [add_user_roles_and_invites.py](file:///C:/Users/aryar/.gemini/antigravity/scratch/Projetos%20Serios/Projetos%20Principais/Cria%20Blog%20-%20Aryaraj/backend/scripts/add_user_roles_and_invites.py)
 - **Ação:** Adiciona colunas à tabela `users`, atualiza o usuário inicial do `.env` para `super_admin` e cria a tabela `invites`.
 
+## [2026-10-13] - Adição da Coluna de WhatsApp na Tabela de Usuários
 
+### Tabelas Alteradas
+
+#### 1. `users`
+Adicionada a coluna `whatsapp` para armazenar o número de contato internacional formatado (com DDI e DDD) do administrador:
+- `whatsapp`: VARCHAR (Opcional, armazena telefone com código de país e máscara, ex: `+55 (11) 99999-9999`)
+
+### Scripts de Inicialização / Migração
+- **Script:** [add_whatsapp_to_users.py](file:///C:/Users/aryar/.gemini/antigravity/scratch/Projetos%20Serios/Projetos%20Principais/Cria%20Blog%20-%20Aryaraj/backend/scripts/add_whatsapp_to_users.py)
+- **Ação:** Executa `ALTER TABLE users ADD COLUMN IF NOT EXISTS whatsapp VARCHAR;` garantindo persistência retrocompatível.

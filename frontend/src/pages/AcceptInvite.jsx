@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { api } from '../utils/api';
 import { useToast } from '../components/ToastContext';
 import { UserCheck, Shield, Lock, Mail, User, Eye, EyeOff, AlertTriangle, ArrowRight, ArrowLeft } from 'lucide-react';
+import PhoneInputField from '../components/PhoneInputField';
 
 export default function AcceptInvite() {
   const { token } = useParams();
@@ -15,15 +16,26 @@ export default function AcceptInvite() {
   // Estados dos inputs iniciados explicitamente vazios
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
+  // Critérios de validação de senha forte
+  const passwordCriteria = {
+    length: password.length >= 12,
+    hasUpper: /[A-Z]/.test(password),
+    hasLower: /[a-z]/.test(password),
+    hasNumber: /[0-9]/.test(password),
+    hasSpecial: /[^A-Za-z0-9]/.test(password),
+  };
+
   useEffect(() => {
     // Garante que todos os campos iniciem rigorosamente em branco
     setUsername('');
     setEmail('');
+    setWhatsapp('');
     setPassword('');
     setConfirmPassword('');
 
@@ -52,8 +64,24 @@ export default function AcceptInvite() {
       return;
     }
 
-    if (password.length < 6) {
-      showToast('A senha deve ter no mínimo 6 caracteres.', 'error');
+    if (!passwordCriteria.length) {
+      showToast('A senha deve ter no mínimo 12 caracteres.', 'error');
+      return;
+    }
+    if (!passwordCriteria.hasUpper) {
+      showToast('A senha deve conter pelo menos uma letra maiúscula.', 'error');
+      return;
+    }
+    if (!passwordCriteria.hasLower) {
+      showToast('A senha deve conter pelo menos uma letra minúscula.', 'error');
+      return;
+    }
+    if (!passwordCriteria.hasNumber) {
+      showToast('A senha deve conter pelo menos um número.', 'error');
+      return;
+    }
+    if (!passwordCriteria.hasSpecial) {
+      showToast('A senha deve conter pelo menos um caractere especial (ex: !@#$%).', 'error');
       return;
     }
 
@@ -67,6 +95,7 @@ export default function AcceptInvite() {
       await api.acceptInvite(token, {
         username: username.trim(),
         email: email.trim(),
+        whatsapp: whatsapp.trim() || undefined,
         password,
       });
 
@@ -227,6 +256,14 @@ export default function AcceptInvite() {
             </div>
           </div>
 
+          {/* WhatsApp com Seletor DDI e Bandeira */}
+          <PhoneInputField
+            label="WhatsApp"
+            value={whatsapp}
+            onChange={setWhatsapp}
+            testId="input-invite-whatsapp"
+          />
+
           {/* Senha */}
           <div>
             <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: 8, fontWeight: 500 }}>
@@ -243,7 +280,7 @@ export default function AcceptInvite() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Mínimo 6 caracteres"
+                placeholder="Mínimo 12 caracteres (ex: Senha@123456)"
                 className="input-field"
                 style={{ paddingLeft: 44, paddingRight: 44, animation: 'none', transition: 'none' }}
                 data-testid="input-invite-password"
@@ -265,6 +302,40 @@ export default function AcceptInvite() {
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
+
+            {/* Checklist Visual de Requisitos da Senha */}
+            {password.length > 0 && (
+              <div
+                style={{
+                  marginTop: 8,
+                  padding: '8px 12px',
+                  background: 'rgba(255, 255, 255, 0.02)',
+                  border: '1px solid var(--border-color)',
+                  borderRadius: 'var(--radius-sm)',
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: 4,
+                  fontSize: '0.74rem',
+                }}
+                data-testid="password-requirements-checklist"
+              >
+                <span style={{ color: passwordCriteria.length ? '#34d399' : '#9ca3af' }}>
+                  {passwordCriteria.length ? '✓' : '○'} 12+ caracteres
+                </span>
+                <span style={{ color: passwordCriteria.hasUpper ? '#34d399' : '#9ca3af' }}>
+                  {passwordCriteria.hasUpper ? '✓' : '○'} Letra maiúscula (A-Z)
+                </span>
+                <span style={{ color: passwordCriteria.hasLower ? '#34d399' : '#9ca3af' }}>
+                  {passwordCriteria.hasLower ? '✓' : '○'} Letra minúscula (a-z)
+                </span>
+                <span style={{ color: passwordCriteria.hasNumber ? '#34d399' : '#9ca3af' }}>
+                  {passwordCriteria.hasNumber ? '✓' : '○'} Número (0-9)
+                </span>
+                <span style={{ color: passwordCriteria.hasSpecial ? '#34d399' : '#9ca3af', gridColumn: 'span 2' }}>
+                  {passwordCriteria.hasSpecial ? '✓' : '○'} Caractere especial (!@#$...)
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Confirmar Senha */}

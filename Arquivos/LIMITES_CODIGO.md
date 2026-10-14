@@ -26,3 +26,25 @@ Para garantir que o projeto permaneça manutenível, modular e que o agente de i
 1. **Backup Prévio:** Antes de modularizar qualquer arquivo, criar uma cópia integral em `backups_refactor/`.
 2. **Aprovação do Usuário:** Alertar e solicitar permissão antes de realizar alterações estruturais.
 3. **Extração Modular:** Priorizar a separação de componentes reutilizáveis no frontend e utilitários/serviços no backend.
+
+---
+
+## 📊 Histórico de Verificações de Conformidade
+
+### [13/10/2026] - Campo WhatsApp com DDI e Validação Forte de Senha
+- **Backend (Limite: 1.000 linhas):**
+  - `backend/app/routes/users.py`: 235 linhas ✅
+  - `backend/app/models.py`: 53 linhas ✅
+  - `backend/app/main.py`: 84 linhas ✅
+  - `backend/scripts/add_whatsapp_to_users.py`: 15 linhas ✅
+  - `backend/tests/test_users_and_invites.py`: 166 linhas ✅
+  - **Status Backend:** 0 arquivos ultrapassaram o limite. Nada a refatorar.
+- **Frontend (Limite: 500 linhas):**
+  - `frontend/src/components/PhoneInputField.jsx`: 237 linhas ✅
+  - `frontend/src/pages/AcceptInvite.jsx`: 358 linhas ✅
+  - `frontend/src/utils/api.js`: 304 linhas ✅
+  - `frontend/tests/PhoneInputField.test.jsx`: 44 linhas ✅
+  - `frontend/tests/AcceptInvite.test.jsx`: 147 linhas ✅
+  - **Status Frontend:** 0 arquivos ultrapassaram o limite. Nada a refatorar.
+- **Conclusão:** 100% dos arquivos em conformidade com as diretrizes Clean Code.
+

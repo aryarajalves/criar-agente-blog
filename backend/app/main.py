@@ -17,6 +17,14 @@ async def lifespan(app: FastAPI):
     try:
         # Criar tabelas se não existirem
         init_db()
+
+        # Garantir colunas adicionais para bancos existentes
+        try:
+            from sqlalchemy import text
+            with engine.begin() as conn:
+                conn.execute(text("ALTER TABLE users ADD COLUMN IF NOT EXISTS whatsapp VARCHAR;"))
+        except Exception as col_err:
+            logger.warning(f"Aviso ao verificar coluna whatsapp: {col_err}")
         
         # Garantir diretório de uploads
         os.makedirs(os.path.join("app", "static", "uploads"), exist_ok=True)
